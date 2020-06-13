@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Api;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class ApiController extends Controller
 {
@@ -26,10 +28,14 @@ class ApiController extends Controller
      */
     public function store(Request $request)
     {
-        $api = new Api;
-        $api->name = $request->name;
-        $api->kizi = $request->kizi;
-        $api->save();
+        $now = Carbon::now();
+        $param = [
+            "name" => $request->name,
+            "kizi" => $request->kizi,
+            "created_at" => $now,
+        ];            
+        DB::insert('insert into users (name,kizi,created_at)
+            values (:name,:kizi,:created_at)', $param);
         return response()->json();
     }
 }
